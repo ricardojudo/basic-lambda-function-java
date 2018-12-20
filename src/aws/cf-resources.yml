@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Resources for basic lambda function with Java
+
+Resources:
+  BasicFunctionJavaBucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      BucketName: rcm-basic-lambda-function-java
+    DeletionPolicy: Delete
+
+  BasicFunctionJavaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - 
+         PolicyName: "BasicFunctionJavaBucketPolicy"
+         PolicyDocument:
+           Version: "2012-10-17"
+           Statement:
+              - 
+                Effect: "Allow"
+                Action: 
+                - "s3:GetObject"
+                - "s3:GetObjectVersion"
+                - "s3:PutObject"
+                Resource: !Join ["/" , [!GetAtt BasicFunctionJavaBucket.Arn, "*"]]
+              -
+                Effect: "Allow"
+                Action: "logs:*"
+                Resource: "arn:aws:logs:*:*:*"
+Outputs:
+  BasicFunctionJavaRole:
+    Description: BasicFunctionJavaRole
+    Value: !GetAtt BasicFunctionJavaRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-BasicFunctionJavaRole

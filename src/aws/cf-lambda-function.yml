@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Basic lambda function with Java
+
+Resources:
+  BasicLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Basic lambda function with Java
+      Code: 
+        S3Bucket: rcm-bacic-lambda-function-java
+        S3Key: basic-function-java-1.0.0.jar
+      FunctionName: basic-function-java
+      Handler: com.example.lambda.demo.BasicLambdaFunctionHandler
+      Runtime: java8
+      Role: 
+        Fn::ImportValue: basic-function-java-BasicFunctionJavaRole
+      
